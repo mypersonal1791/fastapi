@@ -1,14 +1,43 @@
-from typing import Optional
 
-from fastapi import FastAPI
+from typing import Annotated
+
+from fastapi import FastAPI, File, UploadFile
+from fastapi.responses import HTMLResponse
 
 app = FastAPI()
 
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
+@app.post("/files/")
+async def create_files(files: Annotated[list[bytes], File()]):
+    return {"file_sizes": [len(file) for file in files]}
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Optional[str] = None):
-    return {"item_id": item_id, "q": q}
+
+@app.post("/uploadfiles/")
+async def create_upload_files(files: list[UploadFile]):
+    import os
+    from supabase import create_client, Client
+
+    url: str = 'https://tdklrrxdggwsbfdvtlws.supabase.co'
+    key: str = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRka2xycnhkZ2d3c2JmZHZ0bHdzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcwOTc1MzA3MSwiZXhwIjoyMDI1MzI5MDcxfQ.a8mYI-pyEnmHqj7S30uEpOdIyjKhEbGPu62yTq961eE'
+    supabase: Client = create_client(url, key)
+    bucket_name: str = "PDF storage"
+    for f in files:
+        contents = await f.read()
+
+        data = supabase.storage.from_(bucket_name).upload('user/' + f.filename, contents)
+    return {"filenames": [file.filename for file in files]}
+
+
+@app.get("/")
+async def main():
+    content = """
+<body>
+<title>Upload</title>
+<h1>Please upload your file</h1>
+<form action="/uploadfiles/" enctype="multipart/form-data" method="post">
+<input name="files" type="file" multiple>
+<input type="submit">
+</form>
+</body>
+    """
+    return HTMLResponse(content=content)

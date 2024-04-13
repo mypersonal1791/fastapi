@@ -1,1 +1,6 @@
-fastapi[all]
+Flask
+Gunicorn
+supabase
+
+fastapi~=0.110.0
+requests~=2.31.0
