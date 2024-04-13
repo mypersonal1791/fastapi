@@ -27,8 +27,8 @@ def upload_pdf():
         #file_path = os.path.join(os.getcwd(), filename)
         from supabase import create_client, Client
 
-        url: str = 'https://tdklrrxdggwsbfdvtlws.supabase.co'
-        key: str = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRka2xycnhkZ2d3c2JmZHZ0bHdzIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcwOTc1MzA3MSwiZXhwIjoyMDI1MzI5MDcxfQ.a8mYI-pyEnmHqj7S30uEpOdIyjKhEbGPu62yTq961eE'
+        url: str = 'https://hdgdccrpmfbjcxjuzlct.supabase.co'
+        key: str = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhkZ2RjY3JwbWZiamN4anV6bGN0Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcxMzA0MDg2OSwiZXhwIjoyMDI4NjE2ODY5fQ.8SlQy0zWReo0__PJHt1mInNtNNtIzOeZs2kiEPXAADE'
         supabase: Client = create_client(url, key)
         bucket_name: str = "Images"
         contents = file.read()
